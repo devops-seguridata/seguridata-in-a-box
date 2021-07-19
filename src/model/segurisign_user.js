@@ -8,3 +8,4 @@ class SegurisignUser {
 		Object.assign(this, data);
 	}
 }
+export default SegurisignUser

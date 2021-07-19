@@ -6,3 +6,5 @@ class SegurisignDocument{
 		Object.assign(this, data);
 	}
 }
+
+export default SegurisignDocument

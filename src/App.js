@@ -1,25 +1,26 @@
-import logo from './logo.svg';
 import './App.css';
+import LoginForm from './components/login_form_component';
+import {useEffect, useState} from "react";
+import {auth} from "./controller/firebase_controller";
+import Home from "./components/home";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [user, setUser] = useState(null);
+    useEffect(() => {
+        auth.onAuthStateChanged(userAuth => {
+            if (userAuth) {
+                setUser(userAuth)
+            } else {
+                setUser(null);
+            }
+        })
+    })
+    return (
+        <div className="App">
+            {user ? <Home/>:  <LoginForm/>}
+
+        </div>
+    );
 }
 
 export default App;
