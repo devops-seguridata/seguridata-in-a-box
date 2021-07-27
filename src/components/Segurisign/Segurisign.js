@@ -63,7 +63,7 @@ const SignaturePad = () => {
     }
 
     const addDocument = () =>{
-
+        console.log('wuuju')
     }
 
     return (
@@ -75,6 +75,7 @@ const SignaturePad = () => {
                             {close => (
                                 <div>
                                     <button onClick={close}>Cerrar</button>
+                                    <button onClick={addDocument}>Cerrar</button>
                                 </div>
                             )}
                         </Popup>

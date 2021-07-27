@@ -3,7 +3,7 @@ import {useState} from "react";
 import QRController from "../../controller/qr_controller";
 
 const SafeQR = () => {
-    const [scanned, setScanned] = useState({result: 'Sin Resultado', delay: false});
+    const [scanned] = useState({result: 'Sin Resultado', delay: false});
     const qrController = new QRController();
     const previewStyle = {
         height: 240,
