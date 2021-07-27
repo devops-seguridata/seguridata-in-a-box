@@ -1,5 +1,5 @@
 class SegurisignDocument{
-	mulitilateralId;
+	multilateralId;
 	fileName;
 
 	constructor(data) {
