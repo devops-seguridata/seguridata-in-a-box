@@ -5,7 +5,7 @@ import axios from "axios";
 
 class SegurisignController {
     iDDomain = "1";
-    apiUrl = "http://200.66.66.212:8087/ws-rest-hrv-4.7.0"
+    apiUrl = "https://200.66.66.212:8088/ws-rest-hrv-4.7.0"
 
     header = {
         'Content-Type': 'application/json; charset=UTF-8',

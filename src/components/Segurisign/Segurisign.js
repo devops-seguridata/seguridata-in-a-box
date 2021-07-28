@@ -39,6 +39,7 @@ const Segurisign = () => {
 const SignaturePad = () => {
     const [loaded, setLoaded] = useState({hasLoaded: false, documents: null});
     const [location, setLocation] = useState({isEnabled: false, lat: 0, long: 0})
+    const signers = [];
 
     useEffect(() => {
         if (!location.isEnabled) {
@@ -63,7 +64,7 @@ const SignaturePad = () => {
     }
 
     const addDocument = () =>{
-        console.log('wuuju')
+        seguriSignController.addDocumentForParticipants(signers)
     }
 
     return (
@@ -73,9 +74,10 @@ const SignaturePad = () => {
                     <div>
                         <Popup modal trigger={<button>Cargar archivo</button>}>
                             {close => (
-                                <div>
+                                <div className='sigNewDoc'>
+                                    <input type="file" onChange={this.onFileChange} />
                                     <button onClick={close}>Cerrar</button>
-                                    <button onClick={addDocument}>Cerrar</button>
+                                    <button onClick={addDocument}>Enviar archivo!</button>
                                 </div>
                             )}
                         </Popup>
