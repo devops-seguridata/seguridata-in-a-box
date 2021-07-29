@@ -66,6 +66,10 @@ const SignaturePad = () => {
     const addDocument = () =>{
         seguriSignController.addDocumentForParticipants(signers)
     }
+    const onFileChange = event => {
+        this.setState({ selectedFile: event.target.files[0] });
+
+    };
 
     return (
         location.isEnabled ?
@@ -75,7 +79,7 @@ const SignaturePad = () => {
                         <Popup modal trigger={<button>Cargar archivo</button>}>
                             {close => (
                                 <div className='sigNewDoc'>
-                                    <input type="file" onChange={this.onFileChange} />
+                                    <input type="file" onChange={onFileChange} />
                                     <button onClick={close}>Cerrar</button>
                                     <button onClick={addDocument}>Enviar archivo!</button>
                                 </div>
