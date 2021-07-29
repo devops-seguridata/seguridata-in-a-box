@@ -22,14 +22,19 @@ class SegurisignController {
         return new Date(Date.now()).toLocaleString().split(',')[0].split(' ')[0].replaceAll('/', '-');
     }
 
+    toBase64 = file => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
+
     async biometricSignature(signData, multilateralId, lat, long) {
         const biometricX = [];
         const biometricY = [];
         const biometricP = [];
         const biometricT = [];
-        console.log(signData)
         signData.toData()[0].forEach(point => {
-            console.log(point);
             biometricX.push(point.x);
             biometricY.push(point.y);
             biometricT.push(point.time);
@@ -69,7 +74,6 @@ class SegurisignController {
             body: JSON.stringify(body)
         };
         let response = await fetch(this.apiUrl + '/biometricsignature', requestOptions);
-        console.log(body)
         if (response.status === 200) {
             let data = await response.json();
             console.log(data);
@@ -77,7 +81,6 @@ class SegurisignController {
         }
         return false;
     }
-
 
     async getStatus() {
         const documents = [];
@@ -108,13 +111,20 @@ class SegurisignController {
     }
 
     async addDocumentForParticipants(signers, file) {
+        const signersJSON = []
+        signers.forEach(signer => signersJSON.push({
+            infoEmployee: signer,
+            inputDataType: 'EMAIL',
+            participantType: 'EMPLOYEE',
+            role: 'FIRMANTE'
+        }));
         const body = {
             "automaticSignatureDomain": false,
-            "docNameWithExtension": '',
+            "docNameWithExtension": file.name,
             "docType": "CONTRATOS",
-            "document": '',
+            "document": await this.toBase64(file),
             "idDomain": this.iDDomain,
-            "lstParticipant": signers,
+            "lstParticipant": signersJSON,
             "passwordDomain": "",
             "userDomain": "",
             "xmlCallback": ""
@@ -122,14 +132,21 @@ class SegurisignController {
 
         const requestOptions = {
             method: 'POST',
-            headers: this.getSecureHeader(),
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                "Accept": "application/json",
+                'Access-Control-Allow-Origin':'*',
+                'authorization': this.segurisignUser.token
+            },
             body: JSON.stringify(body)
         };
+        console.log(body);
         let response = await fetch(this.apiUrl + '/participants', requestOptions);
 
         if (response.status === 200) {
             let data = await response.json();
-            return data.result === 1;
+            console.log(data)
+            return data.resultado === 1;
             // handle data
         }
         return false;
@@ -145,7 +162,6 @@ class SegurisignController {
             "passwordDomain": "",
             "rfc": "",
             "userDomain": ""
-
         };
 
         const requestOptions = {
@@ -157,7 +173,7 @@ class SegurisignController {
 
         if (response.status === 200) {
             let data = await response.json();
-            return data.result === 1;
+            return data.resultado === 1;
             // handle data
         }
         return false;
@@ -195,7 +211,6 @@ class SegurisignController {
             "password": password,
             "token": this.segurisignUser.token
         };
-        console.log(body)
         const requestOptions = {
             method: 'POST',
             headers: this.header,
@@ -205,7 +220,6 @@ class SegurisignController {
         return fetch(this.apiUrl + '/user', requestOptions).then(res => {
             if (res.status === 200) {
                 return res.json().then(data => {
-                    console.log(data)
                     this.segurisignUser.idRh = data.idRh
                     return data.resultado === 1;
                 })

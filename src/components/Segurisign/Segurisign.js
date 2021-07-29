@@ -37,9 +37,11 @@ const Segurisign = () => {
 }
 
 const SignaturePad = () => {
+    const [selectedFile, setSelectedFile] = useState({selectedFile: null, hasSelected: false})
+    const [signers, setSigners] = useState({arr: []});
     const [loaded, setLoaded] = useState({hasLoaded: false, documents: null});
-    const [location, setLocation] = useState({isEnabled: false, lat: 0, long: 0})
-    const signers = [];
+    const [location, setLocation] = useState({isEnabled: false, lat: 0, long: 0});
+    const signerInput = useRef(null);
 
     useEffect(() => {
         if (!location.isEnabled) {
@@ -63,11 +65,37 @@ const SignaturePad = () => {
         })
     }
 
-    const addDocument = () =>{
-        seguriSignController.addDocumentForParticipants(signers)
+    const addDocument = () => {
+        if (signers.arr.length === 0) {
+            alert('Necesitas agregar por lo menos un firmante');
+            return;
+        }
+        if (!selectedFile.hasSelected) {
+            alert('Selecciona un archivo');
+            return;
+        }
+        seguriSignController.addDocumentForParticipants(signers.arr, selectedFile.selectedFile).then(succeed => {
+            console.log(succeed)
+        });
     }
+
+    const addSigner = async () => {
+        const signerMail = signerInput.current.value;
+        const isValid = await seguriSignController.getSignersList(signerMail);
+        if (isValid) {
+            if (signers.arr.includes(signerMail))
+                alert('Firmante ya agregado');
+            else {
+                setSigners({arr: [...signers.arr, signerMail]}) //simple value
+                alert('Agregado');
+                console.log(signers);
+            }
+        } else
+            alert('Firmante no registrado');
+    }
+
     const onFileChange = event => {
-        this.setState({ selectedFile: event.target.files[0] });
+        setSelectedFile({hasSelected: true, selectedFile: event.target.files[0]});
 
     };
 
@@ -79,7 +107,12 @@ const SignaturePad = () => {
                         <Popup modal trigger={<button>Cargar archivo</button>}>
                             {close => (
                                 <div className='sigNewDoc'>
-                                    <input type="file" onChange={onFileChange} />
+                                    <div>
+                                        <input type='text' ref={signerInput}
+                                               placeholder='Ingresa el correo de los firmantes'/>
+                                        <button onClick={addSigner}>Agregar firmante</button>
+                                    </div>
+                                    <input type="file" onChange={onFileChange}/>
                                     <button onClick={close}>Cerrar</button>
                                     <button onClick={addDocument}>Enviar archivo!</button>
                                 </div>
