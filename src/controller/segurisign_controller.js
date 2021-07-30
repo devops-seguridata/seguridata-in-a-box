@@ -77,7 +77,7 @@ class SegurisignController {
         if (response.status === 200) {
             let data = await response.json();
             console.log(data);
-            return data.result === 1;
+            return data.resultado === 1;
         }
         return false;
     }
@@ -111,6 +111,8 @@ class SegurisignController {
     }
 
     async addDocumentForParticipants(signers, file) {
+        const b64 = await this.toBase64(file);
+        const b64Str = b64.substr(b64.indexOf(',') + 1)
         const signersJSON = []
         signers.forEach(signer => signersJSON.push({
             infoEmployee: signer,
@@ -122,7 +124,7 @@ class SegurisignController {
             "automaticSignatureDomain": false,
             "docNameWithExtension": file.name,
             "docType": "CONTRATOS",
-            "document": await this.toBase64(file),
+            "document": b64Str,
             "idDomain": this.iDDomain,
             "lstParticipant": signersJSON,
             "passwordDomain": "",
@@ -135,7 +137,6 @@ class SegurisignController {
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
                 "Accept": "application/json",
-                'Access-Control-Allow-Origin':'*',
                 'authorization': this.segurisignUser.token
             },
             body: JSON.stringify(body)
@@ -221,6 +222,7 @@ class SegurisignController {
             if (res.status === 200) {
                 return res.json().then(data => {
                     this.segurisignUser.idRh = data.idRh
+                    console.log(this.segurisignUser.token);
                     return data.resultado === 1;
                 })
             }

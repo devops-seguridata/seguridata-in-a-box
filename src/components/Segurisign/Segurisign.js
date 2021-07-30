@@ -81,6 +81,10 @@ const SignaturePad = () => {
 
     const addSigner = async () => {
         const signerMail = signerInput.current.value;
+        if (signerMail === '') {
+            alert('Ingrese el correo de un firmante')
+            return;
+        }
         const isValid = await seguriSignController.getSignersList(signerMail);
         if (isValid) {
             if (signers.arr.includes(signerMail))
@@ -139,7 +143,13 @@ const SignPopUP = (props) => {
     const clear = () => sigCanvas.current.clear();
 
     const sign = () => {
-        seguriSignController.biometricSignature(sigCanvas.current, props.multilateralId, props.lat, this.props.long).then(r => console.log(r));
+        seguriSignController.biometricSignature(sigCanvas.current, props.multilateralId, props.lat, props.long).then(r => {
+            if (r)
+                alert(r);
+            else {
+                alert('Error al firmar');
+            }
+        });
     }
     return (
         <div>
