@@ -1,8 +1,9 @@
 import './App.css';
-import LoginForm from './components/login_form_component';
+import LoginForm from './components/Login/Login';
 import React, {useEffect, useState} from "react";
 import {auth} from "./controller/firebase_controller";
 import Home from "./components/home";
+import {BrowserRouter} from "react-router-dom";
 
 function App() {
     const [authentication, setAuthState] = useState({
@@ -30,9 +31,11 @@ function App() {
         return <div>Loading</div>;
     }
     return (
-        <div className="App">
-            {authentication.authenticated ? <Home/> : <LoginForm/>}
-        </div>
+        <BrowserRouter>
+            <div className="App">
+                {authentication.authenticated ? <Home/> : <LoginForm/>}
+            </div>
+        </BrowserRouter>
     );
 }
 
