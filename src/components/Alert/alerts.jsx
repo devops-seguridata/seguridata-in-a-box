@@ -2,17 +2,16 @@
 /* eslint-disable no-console */
 /* eslint-disable quotes */
 import React, { useEffect, useState } from "react";
-import { useFirebaseApp } from "reactfire";
 import uuid from "react-uuid";
 import "./alerts.css";
+import {auth} from "../../controller/firebase_controller";
 
 const Alerts = () => {
-  const firebase = useFirebaseApp();
   const [alerts, setAlerts] = useState([]);
 
   function appendAlerts() {
     const al = [];
-    if (firebase.auth().currentUser.emailVerified) {
+    if (auth.currentUser.emailVerified) {
       console.log("verified");
     } else {
       console.log("not verified");

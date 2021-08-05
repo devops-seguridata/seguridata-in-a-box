@@ -5,5 +5,60 @@
 
 .sigNewDoc{
     background-color: white;
-    border: 2px solid black;
+    width: fit-content;
+    align-content: center;
+}
+newDocContent{
+
+}
+.centered {
+    height: 100vh; /* Magic here */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.btn-seguridata{
+    background-color: #83bb04;
+    color: white;
+    height: 1.8rem;
+    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    width: 50%;
+    border: none;
+    border-radius: .25rem;
+}
+
+.btn-seguridata-lg{
+    background-color: #83bb04;
+    color: white;
+    box-shadow: 0 4px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    border: none;
+    padding: .5rem;
+    border-radius: .25rem;
+}
+
+.box-shadow{
+
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.inner {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 3rem;
+}
+
+.accordion-button:not(.collapsed){
+   background-color: white;
+    color: #83bb04;
+}
+
+.accordion-button:focus {
+    border-color: #83bb04;
+    box-shadow: 0 0 0 .2rem rgba(154, 215, 14, 0.3);
+}
+
+.input-password-sign{
+    padding: .3rem;
+    border-radius: .2rem;
+    height: 2rem;
 }

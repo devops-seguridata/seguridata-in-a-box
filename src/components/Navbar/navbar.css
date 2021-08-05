@@ -43,7 +43,7 @@
 }
 
 .option :hover {
-  color: gray;
+  color: #83bb04;
 }
 
 .salirbt {
@@ -65,9 +65,11 @@
   margin-right: 4px;
 }
 
-a {
+a:visited, a:link, a:active {
+  color: black;
   text-decoration: none;
 }
+
 
 .signin-up {
   display: flex;

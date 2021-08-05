@@ -2,8 +2,9 @@ import './App.css';
 import LoginForm from './components/Login/Login';
 import React, {useEffect, useState} from "react";
 import {auth} from "./controller/firebase_controller";
-import Home from "./components/home";
+import Home from "./components/Home/Home";
 import {BrowserRouter} from "react-router-dom";
+import Waves from "./components/Waves/waves";
 
 function App() {
     const [authentication, setAuthState] = useState({
@@ -28,7 +29,10 @@ function App() {
         ), [setAuthState]);
 
     if (authentication.initializing) {
-        return <div>Loading</div>;
+        return <div>
+            <div className='centered'>Loading</div>
+            <Waves/>
+        </div>;
     }
     return (
         <BrowserRouter>

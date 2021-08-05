@@ -22,6 +22,14 @@ class SegurisignController {
         return new Date(Date.now()).toLocaleString().split(',')[0].split(' ')[0].replaceAll('/', '-');
     }
 
+    getSecureRequestOptions(body){
+        return  {
+            method: 'POST',
+            headers: this.getSecureHeader(),
+            body: JSON.stringify(body)
+        };
+    }
+
     toBase64 = file => new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -76,13 +84,30 @@ class SegurisignController {
         let response = await fetch(this.apiUrl + '/biometricsignature', requestOptions);
         if (response.status === 200) {
             let data = await response.json();
-            console.log(data);
             return data.resultado === 1;
         }
         return false;
     }
 
-    async getStatus() {
+    async getDocument(multilateralId){
+        const body = {
+            "idDomain": this.iDDomain,
+            "idRhEmp": this.segurisignUser.idRh,
+            "multilateralId": multilateralId,
+            "passwordDomain": "",
+            "userDomain": ""
+        };
+
+        let response = await fetch(this.apiUrl + '/get', this.getSecureRequestOptions(body));
+
+        if (response.status === 200) {
+            let data = await response.json();
+            return data.resultado === 1 ? data.document : ''
+        }
+
+    }
+
+    async getStatus(status) {
         const documents = [];
         const body = {
             "endDate": this.getCurrentDate(),
@@ -90,21 +115,17 @@ class SegurisignController {
             "idRhEmp": this.segurisignUser.idRh,
             "iniDate": "01-01-2021",
             "passwordDomain": "",
-            "statusReceipt": "PENDIENTES_POR_FIRMAR_EMPLEADO",
+            "statusReceipt": status,
             "userDomain": ""
         };
 
-        const requestOptions = {
-            method: 'POST',
-            headers: this.getSecureHeader(),
-            body: JSON.stringify(body)
-        };
-        let response = await fetch(this.apiUrl + '/getStatus', requestOptions);
+        let response = await fetch(this.apiUrl + '/getStatus', this.getSecureRequestOptions(body));
 
         if (response.status === 200) {
             let data = await response.json();
             for (const doc in data.lstReceipts) {
                 documents.push(new SegurisignDocument(data.lstReceipts[doc]));
+                console.log(data.lstReceipts[doc])
             }
             return documents;
         }
@@ -132,21 +153,10 @@ class SegurisignController {
             "xmlCallback": ""
         };
 
-        const requestOptions = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                "Accept": "application/json",
-                'authorization': this.segurisignUser.token
-            },
-            body: JSON.stringify(body)
-        };
-        console.log(body);
-        let response = await fetch(this.apiUrl + '/participants', requestOptions);
+        let response = await fetch(this.apiUrl + '/participants', this.getSecureRequestOptions(body));
 
         if (response.status === 200) {
             let data = await response.json();
-            console.log(data)
             return data.resultado === 1;
             // handle data
         }
@@ -165,16 +175,11 @@ class SegurisignController {
             "userDomain": ""
         };
 
-        const requestOptions = {
-            method: 'POST',
-            headers: this.getSecureHeader(),
-            body: JSON.stringify(body)
-        };
-        let response = await fetch(this.apiUrl + '/getlist', requestOptions);
+        let response = await fetch(this.apiUrl + '/getlist', this.getSecureRequestOptions(body));
 
         if (response.status === 200) {
             let data = await response.json();
-            return data.resultado === 1;
+            return data.resultado === 1 && data.signerList.length > 0;
             // handle data
         }
         return false;
@@ -222,7 +227,6 @@ class SegurisignController {
             if (res.status === 200) {
                 return res.json().then(data => {
                     this.segurisignUser.idRh = data.idRh
-                    console.log(this.segurisignUser.token);
                     return data.resultado === 1;
                 })
             }
