@@ -209,6 +209,12 @@ const SignaturePad = () => {
                                                                     </li>
                                                                 </div>
                                                                 <br/>
+                                                                <button className='btn-seguridata-lg'
+                                                                        onClick={() => seguriSignController.getDocument(item.multilateralId).then(docUrl => {
+                                                                                window.open('data:application/pdf;base64,' + docUrl);
+                                                                            }
+                                                                        )}>Ver
+                                                                </button>
                                                                 <SignPopUP long={location.long} lat={location.lat}
                                                                            key={item.multilateralId}
                                                                            multilateralId={item.multilateralId}
