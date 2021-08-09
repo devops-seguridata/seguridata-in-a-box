@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
+import {Document, pdfjs} from 'react-pdf/dist/esm/entry.webpack';
 import SegurisignController from "../../controller/segurisign_controller";
 import SignatureCanvas from 'react-signature-canvas'
 import Card from 'react-bootstrap/Card';
@@ -12,6 +13,7 @@ import CustomToasts from "../Toasts/CustomToasts";
 import {ToastContainer} from "react-toastify";
 import LoadingOverlay from 'react-loading-overlay'
 import BounceLoader from 'react-spinners/BounceLoader'
+import {Page} from "react-pdf";
 
 
 const seguriSignController = new SegurisignController();
@@ -79,6 +81,7 @@ const SignaturePad = () => {
         expiredDoc: [],
         cancelledByThirds: []
     });
+    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     useEffect(() => {
         if (!location.isEnabled) {
             navigator.geolocation.getCurrentPosition(
@@ -336,14 +339,9 @@ const SignaturePad = () => {
 
                                 <div style={{'margin-top': '3rem'}}>
                                     <Popup modal trigger={
-                                        <Button size='lg'
-                                                style={{
-                                                    'backgroundColor': 'white',
-                                                    'border': 'green'
-                                                }}>
-
-                                            <h2>Subir documento</h2>
-                                            <FcUpload/></Button>}>
+                                        <button size='lg' className='btn-seguridata-upload'>
+                                            <h6 style={{'color': '#83bb04'}}>Subir documento</h6>
+                                            <FcUpload/></button>}>
                                         {close => (
                                             <LoadingOverlay
                                                 active={loader}
@@ -356,7 +354,7 @@ const SignaturePad = () => {
                                                             <div className='newDocContent'>
                                                                 <Col>
                                                                     <Row style={{'marginBottom': '1rem'}}>
-                                                                        <Col><input type='text' ref={signerInput}
+                                                                        <Col><input className='input-email-firmante' type='text' ref={signerInput}
                                                                                     placeholder='Ingresa el correo de los firmantes'/>
                                                                         </Col>
                                                                         <Col>
@@ -369,6 +367,12 @@ const SignaturePad = () => {
                                                                         <Col><Form.Control type="file" size="sm"
                                                                                            onChange={onFileChange}/></Col>
                                                                     </Form.Group>
+                                                                    <Row>
+                                                                        <Document
+                                                                            file={selectedFile.selectedFile}>
+                                                                            <Page pageNumber={1}/>
+                                                                        </Document>
+                                                                    </Row>
                                                                     <Col style={{'margin-top': '1rem'}}>
 
                                                                         <Button variant="outline-dark"
@@ -437,7 +441,8 @@ const SignPopUP = (props) => {
 
                                 <Col>
                                     <Button variant='outline-dark' onClick={close}>Cerrar</Button>
-                                    <Button variant='outline-dark' style={{'margin-left':'2rem'}} Click={clear}>Borrar</Button>
+                                    <Button variant='outline-dark' style={{'margin-left': '2rem'}}
+                                            Click={clear}>Borrar</Button>
                                     <button className='btn-seguridata-lg' style={{
                                         'height': '3rem',
                                         'width': '9rem',

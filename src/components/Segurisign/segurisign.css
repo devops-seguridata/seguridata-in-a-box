@@ -48,17 +48,49 @@ newDocContent{
 }
 
 .accordion-button:not(.collapsed){
-   background-color: white;
-    color: #83bb04;
+   background-color: white !important;
+    color: #83bb04 !important;
 }
 
 .accordion-button:focus {
-    border-color: #83bb04;
-    box-shadow: 0 0 0 .2rem rgba(154, 215, 14, 0.3);
+    border-color: #83bb04 !important;
+    box-shadow: none !important;
 }
 
 .input-password-sign{
     padding: .3rem;
     border-radius: .2rem;
     height: 2rem;
+}
+
+.input-email-firmante{
+    width: 100%;
+    display: block;
+    height: 2.5rem;
+    border-radius: .3rem;
+    border-style: solid;
+    box-shadow: 0 2px 6px 0 rgba(0,0,0,0.2), 0 9px 22px 0 rgba(0,0,0,0.19);
+    padding: 1rem;
+}
+
+.input-email-firmante:focus {
+    border-color: #88be0f !important;
+    border-style: solid;
+    border-width: .01rem;
+}
+
+.react-pdf__Page__canvas {
+    margin: 0 auto;
+    width: 30% !important;
+    height: 30% !important;
+}
+
+.btn-seguridata-upload {
+    background-color: white;
+    border-color: #88be0f;
+    border-width: .09rem;
+    border-radius: 1rem;
+    padding: .9rem;
+
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2), 0 4px 10px 0 rgba(0,0,0,0.19);
 }
