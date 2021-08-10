@@ -89,6 +89,28 @@ class SegurisignController {
         return false;
     }
 
+    async cancelDocument(multilateralId, motive){
+        const body = {
+            "cancelReceipt": true,
+            "idDomain": this.iDDomain,
+            "idRhEmp": this.segurisignUser.idRh,
+            "multilateralId": multilateralId,
+            "passwordDomain": "",
+            "userDomain": "",
+            'reasonForCancellation': motive
+        };
+
+        let response = await fetch(this.apiUrl + '/cancel', this.getSecureRequestOptions(body));
+
+        if (response.status === 200) {
+            let data = await response.json();
+
+            console.log(data);
+            return data.resultado === 1;
+        }
+
+    }
+
     async getDocument(multilateralId){
         const body = {
             "idDomain": this.iDDomain,
