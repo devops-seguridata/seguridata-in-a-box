@@ -1,4 +1,4 @@
-import {Accordion} from "react-bootstrap";
+import {Accordion, Badge, Col, Row} from "react-bootstrap";
 import SignPopUP from "../../SignPopup/SignPopup";
 import React from "react";
 import CancelPopup from "../../CancelPopup/CancelPopup";
@@ -6,7 +6,8 @@ import CancelPopup from "../../CancelPopup/CancelPopup";
 const UnsignedDocuments = (props) => {
     return (
         <Accordion bsPrefix='seguridata' style={{'position': 'inherit'}}>
-            <Accordion.Header>Documentos Por Firmar</Accordion.Header>
+            <Accordion.Header>Por Firmar <Badge style={{'marginLeft': '2rem'}}
+                                                bg="dark">{props.unsignedDocuments.length}</Badge></Accordion.Header>
             <Accordion.Body>
                 <Accordion flush>
                     {
@@ -29,25 +30,33 @@ const UnsignedDocuments = (props) => {
                                             </li>
                                         </div>
                                         <br/>
-
-                                        <CancelPopup
-                                            toaster={props.toaster}
-                                            key={item.multilateralId}
-                                            multilateralId={item.multilateralId}
-                                            seguriSignController={props.seguriSignController}
-                                        />
-                                        <button className='btn-seguridata-lg'
-                                                onClick={() => props.seguriSignController.getDocument(item.multilateralId).then(docUrl => {
-                                                        window.open('data:application/pdf;base64,' + docUrl);
-                                                    }
-                                                )}>Ver
-                                        </button>
-                                        <SignPopUP
-                                            seguriSignController={props.seguriSignController}
-                                            long={props.long} lat={props.lat}
-                                            key={item.multilateralId}
-                                            multilateralId={item.multilateralId}
-                                            fileName={item.fileName}/>
+                                        <Row>
+                                            <Col>
+                                                <CancelPopup
+                                                    toaster={props.toaster}
+                                                    key={item.multilateralId}
+                                                    multilateralId={item.multilateralId}
+                                                    seguriSignController={props.seguriSignController}
+                                                />
+                                            </Col>
+                                            <Col>
+                                                <button className='btn-seguridata-lg'
+                                                    style={{'width':'80%'}}
+                                                        onClick={() => props.seguriSignController.getDocument(item.multilateralId).then(docUrl => {
+                                                                window.open('data:application/pdf;base64,' + docUrl);
+                                                            }
+                                                        )}>Ver
+                                                </button>
+                                            </Col>
+                                            <Col>
+                                            <SignPopUP
+                                                seguriSignController={props.seguriSignController}
+                                                long={props.long} lat={props.lat}
+                                                key={item.multilateralId}
+                                                multilateralId={item.multilateralId}
+                                                fileName={item.fileName}/>
+                                            </Col>
+                                        </Row>
                                     </div>
                                 </Accordion.Body>
                             </Accordion.Item>

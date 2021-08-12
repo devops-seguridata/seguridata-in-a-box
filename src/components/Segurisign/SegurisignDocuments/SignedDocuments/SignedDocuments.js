@@ -1,10 +1,10 @@
-import {Accordion} from "react-bootstrap";
+import {Accordion, Badge} from "react-bootstrap";
 import React from "react";
 
 const SignedDocuments = (props) =>{
    return(
        <Accordion bsPrefix='seguridata' flush style={{'position': 'inherit'}}>
-           <Accordion.Header>Documentos Firmados</Accordion.Header>
+           <Accordion.Header>Firmados<Badge style={{'marginLeft':'3rem'}} pill bg="secondary">{props.signedDocuments.length}</Badge></Accordion.Header>
            <Accordion.Body>
                <Accordion flush>
                    {props.signedDocuments.map(function (item, index) {

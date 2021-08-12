@@ -30,7 +30,6 @@ function App() {
 
     if (authentication.initializing) {
         return <div>
-            <div className='centered'>Loading</div>
             <Waves/>
         </div>;
     }

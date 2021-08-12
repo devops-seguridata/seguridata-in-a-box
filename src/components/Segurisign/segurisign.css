@@ -94,3 +94,11 @@ newDocContent{
 
     box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2), 0 4px 10px 0 rgba(0,0,0,0.19);
 }
+
+.input-cancel{
+    width: 20rem;
+    height: 15rem;
+    padding: 1rem;
+    margin: 2rem;
+    border-radius: .3rem;
+}

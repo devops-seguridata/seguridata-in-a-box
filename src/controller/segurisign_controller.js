@@ -104,8 +104,6 @@ class SegurisignController {
 
         if (response.status === 200) {
             let data = await response.json();
-
-            console.log(data);
             return data.resultado === 1;
         }
 
@@ -147,7 +145,6 @@ class SegurisignController {
             let data = await response.json();
             for (const doc in data.lstReceipts) {
                 documents.push(new SegurisignDocument(data.lstReceipts[doc]));
-                console.log(data.lstReceipts[doc])
             }
             return documents;
         }

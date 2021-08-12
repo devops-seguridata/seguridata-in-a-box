@@ -20,7 +20,7 @@ const SignPopUP = (props) => {
     }
     return (
         <div>
-            <Popup modal trigger={<button className='btn-seguridata-lg'>Firmar</button>}>
+            <Popup modal trigger={<button style={{'width':'100%'}} className='btn-seguridata-lg'>Firmar</button>}>
                 {close => (
                     <div align='center'>
                         <Card style={{}}>

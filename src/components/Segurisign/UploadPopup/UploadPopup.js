@@ -90,16 +90,10 @@ const UploadPopup = (props) => {
                                                                    onChange={onFileChange}/></Col>
                                             </Form.Group>
                                             <Row>
-                                                {
-                                                    loadedFile.hasLoaded ?
-                                                        <Document onLoadError={console.error}
-                                                                  onLoadSuccess={onDocumentLoad}
-                                                                  file={selectedFile.selectedFile}>
-                                                            <Page pageNumber={1}/>
-                                                        </Document>
-                                                        :
-                                                        <div></div>
-                                                }
+                                                <Document onLoadError={console.error}
+                                                          file={selectedFile.selectedFile}>
+                                                    <Page pageNumber={1}/>
+                                                </Document>
                                             </Row>
                                             <Col style={{'margin-top': '1rem'}}>
 

@@ -1,10 +1,10 @@
-import {Accordion} from "react-bootstrap";
+import {Accordion, Badge} from "react-bootstrap";
 import React from "react";
 
 const CancelledDocuments = (props) =>{
     return(
         <Accordion bsPrefix='seguridata' flush style={{'position': 'inherit'}}>
-            <Accordion.Header>Documentos Cancelados</Accordion.Header>
+            <Accordion.Header>Cancelados</Accordion.Header>
             <Accordion.Body bsPrefix='seguridata-btn'>
                 <Accordion flush>
                     {props.cancelledDoc.map(function (item, index) {

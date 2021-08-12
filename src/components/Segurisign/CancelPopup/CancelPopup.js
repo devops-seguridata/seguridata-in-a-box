@@ -33,7 +33,7 @@ const CancelPopup = (props) => {
                                 <Card.Body>
                                     <Card.Title>Cancelar documento</Card.Title>
                                     <Col>
-                                    <textarea ref={reasonText}>
+                                    <textarea className='input-cancel' ref={reasonText}>
                                         Escribe el motivo de la cancelación
                                     </textarea>
 
