@@ -176,7 +176,7 @@ class SegurisignController {
 
         if (response.status === 200) {
             let data = await response.json();
-            return data.resultado === 1;
+            return [data.resultado === 1, data.multilateralId];
             // handle data
         }
         return false;

@@ -1,20 +1,21 @@
 import Popup from "reactjs-popup";
-import {FcUpload} from "react-icons/all";
+import {FcUpload, FiDelete} from "react-icons/all";
 import Card from "react-bootstrap/Card";
-import {Col, Form, Row} from "react-bootstrap";
-import {Document, pdfjs} from "react-pdf/dist/umd/entry.webpack";
-import {Page} from "react-pdf";
+import {Accordion, ButtonGroup, Col, Dropdown, Form, Row} from "react-bootstrap";
+import {Document, Page, pdfjs} from 'react-pdf';
 import Button from "react-bootstrap/Button";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import CustomLoader from "../../CustomLoader/CustomLoader";
+import UserController from "../../../controller/user_controller";
 
 const UploadPopup = (props) => {
     const signerInput = useRef(null);
     const [loader, setLoader] = useState(false);
-    const [loadedFile, setLoadedFile] = useState({hasLoaded: false, numPages: 0});
     const [selectedFile, setSelectedFile] = useState({selectedFile: null, hasSelected: false})
     const [signers, setSigners] = useState({arr: []});
+    const userController = new UserController();
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
     const addDocument = () => {
         if (signers.arr.length === 0) {
             props.toaster.warningToast('Necesitas agregar por lo menos un firmante');
@@ -26,8 +27,16 @@ const UploadPopup = (props) => {
         }
 
         setLoader(true);
-        props.seguriSignController.addDocumentForParticipants(signers.arr, selectedFile.selectedFile).then(succeed => {
-            props.toaster.successToast('Documento subido con éxito');
+        props.seguriSignController.addDocumentForParticipants(signers.arr, selectedFile.selectedFile).then(response => {
+            const succeed = response[0];
+            if (succeed) {
+                const multilateralID = response[1];
+                userController.addNewDocToFirebase(signers.arr, multilateralID);
+                props.toaster.successToast('Documento subido con éxito');
+            }
+            else {
+                props.toaster.errorToast('Error al subir documento, intenta de nuevo');
+            }
             setLoader(false);
         }).catch(error => {
             setLoader(false);
@@ -58,7 +67,10 @@ const UploadPopup = (props) => {
     const onFileChange = event => {
         setSelectedFile({hasSelected: true, selectedFile: event.target.files[0]});
     };
-    const onDocumentLoad = ({numPages}) => setLoadedFile({hasLoaded: true, numPages: numPages})
+
+    const deleteSigner = signer => {
+        setSigners({arr: signers.arr.filter(sig => sig !== signer)});
+    }
     return (
         <div style={{'margin-top': '3rem'}}>
             <Popup modal trigger={
@@ -80,9 +92,27 @@ const UploadPopup = (props) => {
                                                             placeholder='Ingresa el correo de los firmantes'/>
                                                 </Col>
                                                 <Col>
-                                                    <button className='btn-seguridata-lg'
-                                                            onClick={addSigner}>Agregar firmante
-                                                    </button>
+                                                    <Dropdown as={ButtonGroup}>
+                                                        <Button bsPrefix='btn-seguridata-lg' onClick={addSigner}
+                                                                variant="success">Agregar firmante
+                                                        </Button>
+                                                        <Dropdown.Toggle style={{
+                                                            'background-color': '#88be0f'
+                                                        }} split variant="success"
+                                                                         id="dropdown-split-basic"/>
+                                                        <Dropdown.Menu>
+                                                            {
+                                                                signers.arr.map(function (signer, index) {
+                                                                    return <Dropdown.Item key={index}>{signer}
+                                                                        <button className='btn-del-signer'
+                                                                                onClick={() => {
+                                                                                    deleteSigner(signer)
+                                                                                }}><FiDelete/></button>
+                                                                    </Dropdown.Item>
+                                                                })
+                                                            }
+                                                        </Dropdown.Menu>
+                                                    </Dropdown>
                                                 </Col>
                                             </Row>
                                             <Form.Group as={Row}>

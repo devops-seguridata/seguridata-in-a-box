@@ -64,7 +64,7 @@ newDocContent{
 }
 
 .input-email-firmante{
-    width: 100%;
+    width: 18rem;
     display: block;
     height: 2.5rem;
     border-radius: .3rem;
@@ -82,7 +82,9 @@ newDocContent{
 .react-pdf__Page__canvas {
     margin: 0 auto;
     width: 30% !important;
-    height: 30% !important;
+    height:90% !important;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 
 .btn-seguridata-upload {
@@ -101,4 +103,17 @@ newDocContent{
     padding: 1rem;
     margin: 2rem;
     border-radius: .3rem;
+}
+
+.btn-del-signer{
+    background-color: transparent;
+    border: none;
+}
+
+.btn-del-signer:hover{
+    color: #88be0f;
+}
+
+.btn-dropdown{
+    color: white;
 }
