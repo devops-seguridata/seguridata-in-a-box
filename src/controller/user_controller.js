@@ -12,6 +12,7 @@ class UserController {
             fileName: document.fileName,
             firmados: [],
             numeroFirmas: users.length,
+            docType: document.docType,
             usuarios: users
         }).then(async () => {
             console.log("Document successfully updated!");
@@ -64,22 +65,22 @@ class UserController {
         }
     }
 
-    getUserDocs(email) {
+    getUserDocs(uid) {
         console.log('ptm')
-        const docs =[]
-        db.collectionGroup("sign-docs")
+        const docs = []
+        db.collection("sign-docs").where('uids', 'array-contains', {uid: uid})
             .get()
-                .then(snapshot => {
-                    console.log(snapshot,'snap')
-                    snapshot.forEach(doc => {
-                        const docData = doc.data()
-                        console.log(docData, 'doctada')
-                        docs.push(docData)
-                    });
-                })
-                .catch(err => {
-                    console.log('Error getting documents', err);
+            .then(snapshot => {
+                console.log(snapshot, 'snap')
+                snapshot.forEach(doc => {
+                    const docData = doc.data()
+                    console.log(docData, 'doctada')
+                    docs.push(docData)
                 });
+            })
+            .catch(err => {
+                console.log('Error getting documents', err);
+            });
         return docs;
     }
 }

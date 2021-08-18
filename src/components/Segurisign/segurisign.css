@@ -1,44 +1,47 @@
-.sigCanvas{
+.sigCanvas {
     background-color: white;
     border: 2px solid black;
 }
 
-.sigNewDoc{
+.sigNewDoc {
     background-color: white;
     width: fit-content;
     align-content: center;
 }
-newDocContent{
+
+newDocContent {
 
 }
+
 .centered {
     height: 100vh; /* Magic here */
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.btn-seguridata{
+
+.btn-seguridata {
     background-color: #83bb04;
     color: white;
     height: 1.8rem;
-    box-shadow: 0 4px 4px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     width: 50%;
     border: none;
     border-radius: .25rem;
 }
 
-.btn-seguridata-lg{
+.btn-seguridata-lg {
     background-color: #83bb04;
     color: white;
-    box-shadow: 0 4px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border: none;
     padding: .5rem;
     border-radius: .25rem;
 }
 
-.box-shadow{
+.box-shadow {
 
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .inner {
@@ -47,8 +50,8 @@ newDocContent{
     margin-top: 3rem;
 }
 
-.accordion-button:not(.collapsed){
-   background-color: white !important;
+.accordion-button:not(.collapsed) {
+    background-color: white !important;
     color: #83bb04 !important;
 }
 
@@ -57,19 +60,19 @@ newDocContent{
     box-shadow: none !important;
 }
 
-.input-password-sign{
+.input-password-sign {
     padding: .3rem;
     border-radius: .2rem;
     height: 2rem;
 }
 
-.input-email-firmante{
+.input-email-firmante {
     width: 18rem;
     display: block;
     height: 2.5rem;
     border-radius: .3rem;
     border-style: solid;
-    box-shadow: 0 2px 6px 0 rgba(0,0,0,0.2), 0 9px 22px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2), 0 9px 22px 0 rgba(0, 0, 0, 0.19);
     padding: 1rem;
 }
 
@@ -82,7 +85,7 @@ newDocContent{
 .react-pdf__Page__canvas {
     margin: 0 auto;
     width: 30% !important;
-    height:90% !important;
+    height: 90% !important;
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
@@ -94,10 +97,10 @@ newDocContent{
     border-radius: 1rem;
     padding: .9rem;
 
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.2), 0 4px 10px 0 rgba(0,0,0,0.19);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 4px 10px 0 rgba(0, 0, 0, 0.19);
 }
 
-.input-cancel{
+.input-cancel {
     width: 20rem;
     height: 15rem;
     padding: 1rem;
@@ -105,15 +108,21 @@ newDocContent{
     border-radius: .3rem;
 }
 
-.btn-del-signer{
+.btn-del-signer {
     background-color: transparent;
     border: none;
 }
 
-.btn-del-signer:hover{
+.btn-del-signer:hover {
     color: #88be0f;
 }
 
-.btn-dropdown{
+.btn-dropdown {
     color: white;
+}
+
+.progress-bar {
+    margin-left: 2rem;
+    background-color: #6b6b6b;
+    margin-right: 2rem;
 }
