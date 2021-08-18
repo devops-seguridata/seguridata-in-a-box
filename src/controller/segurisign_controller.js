@@ -22,8 +22,8 @@ class SegurisignController {
         return new Date(Date.now()).toLocaleString().split(',')[0].split(' ')[0].replaceAll('/', '-');
     }
 
-    getSecureRequestOptions(body){
-        return  {
+    getSecureRequestOptions(body) {
+        return {
             method: 'POST',
             headers: this.getSecureHeader(),
             body: JSON.stringify(body)
@@ -89,7 +89,7 @@ class SegurisignController {
         return false;
     }
 
-    async cancelDocument(multilateralId, motive){
+    async cancelDocument(multilateralId, motive) {
         const body = {
             "cancelReceipt": true,
             "idDomain": this.iDDomain,
@@ -109,7 +109,7 @@ class SegurisignController {
 
     }
 
-    async getDocument(multilateralId){
+    async getDocument(multilateralId) {
         const body = {
             "idDomain": this.iDDomain,
             "idRhEmp": this.segurisignUser.idRh,
@@ -176,7 +176,7 @@ class SegurisignController {
 
         if (response.status === 200) {
             let data = await response.json();
-            return [data.resultado === 1, data.multilateralId];
+            return [data.resultado === 1, {multilateralId: data.multilateralId, fileName: file.fileName, docType: data.docType, iniDate: data.iniDate}];
             // handle data
         }
         return false;

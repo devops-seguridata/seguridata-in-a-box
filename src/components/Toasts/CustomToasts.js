@@ -38,7 +38,7 @@ class CustomToasts {
      }
 
     shortSuccesToast(msg){
-        toast(msg, {
+        toast.success(msg, {
             position: "top-right",
             autoClose: 2500,
             hideProgressBar: false,

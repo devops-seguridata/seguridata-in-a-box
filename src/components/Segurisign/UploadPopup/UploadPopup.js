@@ -30,8 +30,8 @@ const UploadPopup = (props) => {
         props.seguriSignController.addDocumentForParticipants(signers.arr, selectedFile.selectedFile).then(response => {
             const succeed = response[0];
             if (succeed) {
-                const multilateralID = response[1];
-                userController.addNewDocToFirebase(signers.arr, multilateralID);
+                const document = response[1];
+                userController.addNewDocToFirebase(signers.arr, document);
                 props.toaster.successToast('Documento subido con éxito');
             }
             else {

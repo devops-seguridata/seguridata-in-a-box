@@ -9,8 +9,11 @@ import UnsignedDocuments from "./UnsignedDocuments/UnsignedDocuments";
 import CancelledDocuments from "./CancelledDocuments/CancelledDocuments";
 import CancelledThirdsDocuments from "./CancelledThirdsDocuments/CancelledThirdsDocuments";
 import ExpiredDocuments from "./ExpiredDocuments/ExpiredDocuments";
+import UserController from "../../../controller/user_controller";
+import {auth} from "../../../controller/firebase_controller";
 
 const SegurisignDocuments = (props) => {
+    const userController = new UserController();
     const [location, setLocation] = useState({loading: true, isEnabled: false, lat: 0, long: 0});
     const toaster = new CustomToasts();
     const [loaded, setLoaded] = useState({
@@ -32,7 +35,7 @@ const SegurisignDocuments = (props) => {
                         long: position.coords.longitude
                     })
                 },
-                function (error) {
+                function () {
                     setLocation({
                         loading: false,
                         isEnabled: true,
@@ -50,10 +53,10 @@ const SegurisignDocuments = (props) => {
 
     const getDocuments = async () => {
         const [signedDoc, unsignedDoc, cancelledDoc,
-            expiredDoc, cancelledByThirdsDoc] = await Promise.all(
+            expiredDoc, cancelledByThirdsDoc ] = await Promise.all(
             [
-                props.seguriSignController.getStatus('CONCLUIDO'),
                 props.seguriSignController.getStatus('PENDIENTES_POR_FIRMAR_EMPLEADO'),
+                userController.getUserDocs(auth.currentUser.uid),
                 props.seguriSignController.getStatus('CANCELADOS'),
                 props.seguriSignController.getStatus('EXPIRADOS'),
                 props.seguriSignController.getStatus('CANCELADOS_TERCEROS'),
