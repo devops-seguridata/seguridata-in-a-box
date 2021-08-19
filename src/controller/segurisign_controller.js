@@ -154,6 +154,7 @@ class SegurisignController {
         const b64 = await this.toBase64(file);
         const b64Str = b64.substr(b64.indexOf(',') + 1)
         const signersJSON = []
+        const docType = 'CONTRATOS'
         signers.forEach(signer => signersJSON.push({
             infoEmployee: signer,
             inputDataType: 'EMAIL',
@@ -163,7 +164,7 @@ class SegurisignController {
         const body = {
             "automaticSignatureDomain": false,
             "docNameWithExtension": file.name,
-            "docType": "CONTRATOS",
+            "docType": docType,
             "document": b64Str,
             "idDomain": this.iDDomain,
             "lstParticipant": signersJSON,
@@ -178,8 +179,8 @@ class SegurisignController {
             let data = await response.json();
             return [data.resultado === 1, {
                 multilateralId: data.multilateralId,
-                fileName: file.fileName,
-                docType: data.docType,
+                fileName: file.name,
+                docType,
                 iniDate: data.iniDate
             }];
             // handle data

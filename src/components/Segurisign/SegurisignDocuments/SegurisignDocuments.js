@@ -55,7 +55,7 @@ const SegurisignDocuments = (props) => {
         const [signedDoc, unsignedDoc, cancelledDoc,
             expiredDoc, cancelledByThirdsDoc ] = await Promise.all(
             [
-                props.seguriSignController.getStatus('PENDIENTES_POR_FIRMAR_EMPLEADO'),
+                props.seguriSignController.getStatus('CONCLUIDO'),
                 userController.getUserDocs(auth.currentUser.uid),
                 props.seguriSignController.getStatus('CANCELADOS'),
                 props.seguriSignController.getStatus('EXPIRADOS'),

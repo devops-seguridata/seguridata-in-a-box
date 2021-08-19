@@ -1,46 +1,34 @@
 import {Accordion, Badge, Col, ProgressBar, Row, Table} from "react-bootstrap";
 import React, {useEffect, useState} from "react";
 import UserController from "../../../../controller/user_controller";
-import {AiOutlineCheck, TiDeleteOutline} from "react-icons/all";
+import {AiOutlineCheck, AiOutlineMail, TiDeleteOutline} from "react-icons/all";
+import SignPopUP from "../../SignPopup/SignPopup";
+import CancelPopup from "../../CancelPopup/CancelPopup";
+import CustomLoader from "../../../CustomLoader/CustomLoader";
 
 const UnsignedDocuments = (props) => {
-    const [docsWithInfo, setDocsWithInfo] = useState({arr: []})
+    const [loading, setLoading] = useState(false)
     const userController = new UserController()
-    const getDocInfo = async () => {
-        const tmp = [];
-        for (const index in props.unsignedDocuments) {
-            const newDoc = await userController.getSignDocData(props.unsignedDocuments[index].multilateralId)
-            if (newDoc) {
-                tmp.push(newDoc)
-                console.log(tmp)
-            }
-        }
-        return tmp;
-    }
-    useEffect(() => {
-        const getInfo = async () => {
-            const temp = await Promise.all([getDocInfo()]).then(res => setDocsWithInfo({arr: res}));
-        }
-        getInfo();
-
-    }, []);
 
 
     const renderTableCell = (user, index) => {
         return (
             <tr key={index}>
-                <td>{index}</td>
+                <td>{index + 1}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>{user.firmo ? <AiOutlineCheck/> : <TiDeleteOutline/>}</td>
+                <td>
+                    <button><AiOutlineMail/></button>
+                </td>
             </tr>
         )
     }
 
     return (
         <Accordion bsPrefix='seguridata' flush style={{'position': 'inherit'}}>
-            <Accordion.Header>Firmados<Badge style={{'marginLeft': '3rem'}} pill
-                                             bg="secondary">{props.unsignedDocuments.length}</Badge></Accordion.Header>
+            <Accordion.Header>Por Firmar<Badge style={{'marginLeft': '3rem'}} pill
+                                               bg="dark">{props.unsignedDocuments.length}</Badge></Accordion.Header>
             <Accordion.Body>
                 <Accordion flush>
                     {props.unsignedDocuments.map(function (item, index) {
@@ -58,31 +46,67 @@ const UnsignedDocuments = (props) => {
                                         </li>
 
                                         <li>
-                                            Tipo de documento: {item.docType}
+                                            Número de firmas: {item.numeroFirmas}
                                         </li>
+
                                         <li>
-                                            <div>
-                                                <Table striped bordered hover>
-                                                    <thead>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>Nombre</th>
-                                                        <th>Correo</th>
-                                                        <th>Status</th>
-                                                        <th>Recordar</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {item.usuarios.map(renderTableCell)}
-                                                    </tbody>
-                                                </Table>
-                                            </div>
+                                            Firmados: {item.firmados.length}
                                         </li>
+                                        <div>
+                                            <Table striped bordered hover>
+                                                <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Nombre</th>
+                                                    <th>Correo</th>
+                                                    <th>Status</th>
+                                                    <th>Recordar</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {item.usuarios.map(renderTableCell)}
+                                                </tbody>
+                                            </Table>
+                                        </div>
                                     </div>
                                     <br/>
-                                    <button className='btn-seguridata-lg'
-                                    >Descargar
-                                    </button>
+                                    <Row>
+                                        <Col>
+                                            <CancelPopup
+                                                toaster={props.toaster}
+                                                key={item.multilateralId}
+                                                multilateralId={item.multilateralId}
+                                                seguriSignController={props.seguriSignController}
+                                            />
+                                        </Col>
+                                        <Col>
+                                            {
+                                                loading ? <CustomLoader/> :
+                                                    <button className='btn-seguridata-lg'
+                                                            style={{'width': '80%'}}
+                                                            onClick={() => {
+                                                                setLoading(true);
+                                                                props.seguriSignController.getDocument(item.multilateralId).then(docUrl => {
+                                                                        window.open('data:application/pdf;base64,' + docUrl);
+                                                                        setLoading(false);
+                                                                    }
+                                                                ).catch(e => {
+                                                                    setLoading(false);
+                                                                    props.toaster.errorToast(e)
+                                                                })
+                                                            }}>Ver
+                                                    </button>
+                                            }
+                                        </Col>
+                                        <Col>
+                                            <SignPopUP
+                                                seguriSignController={props.seguriSignController}
+                                                long={props.long} lat={props.lat}
+                                                key={item.multilateralId}
+                                                multilateralId={item.multilateralId}
+                                                fileName={item.fileName}/>
+                                        </Col>
+                                    </Row>
                                 </div>
                             </Accordion.Body>
                         </Accordion.Item>

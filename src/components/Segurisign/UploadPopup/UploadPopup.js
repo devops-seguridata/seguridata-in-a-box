@@ -27,14 +27,14 @@ const UploadPopup = (props) => {
         }
 
         setLoader(true);
-        props.seguriSignController.addDocumentForParticipants(signers.arr, selectedFile.selectedFile).then(response => {
+        props.seguriSignController.addDocumentForParticipants(signers.arr, selectedFile.selectedFile).then(async response => {
             const succeed = response[0];
             if (succeed) {
                 const document = response[1];
-                userController.addNewDocToFirebase(signers.arr, document);
+                console.log(signers.arr)
+                await userController.addNewDocToFirebase(signers.arr, document);
                 props.toaster.successToast('Documento subido con éxito');
-            }
-            else {
+            } else {
                 props.toaster.errorToast('Error al subir documento, intenta de nuevo');
             }
             setLoader(false);
@@ -135,7 +135,10 @@ const UploadPopup = (props) => {
                                                         'height': '2.5rem'
                                                     }}
                                                     className='btn-seguridata-lg'
-                                                    onClick={addDocument}>Enviar archivo!
+                                                    onClick={async () => {
+                                                        await addDocument();
+                                                        close()
+                                                    }}>Enviar archivo!
                                                 </button>
                                             </Col>
 

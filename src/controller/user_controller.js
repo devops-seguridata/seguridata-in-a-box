@@ -1,4 +1,5 @@
 import {db} from "./firebase_controller";
+import {logDOM} from "@testing-library/react";
 
 class UserController {
     userCollection = db.collection('users');
@@ -6,18 +7,22 @@ class UserController {
 
     async addNewDocToFirebase(emailList, document) {
         const users = await this.getUIDsFromEmails(emailList);
+        console.log(users)
         const docRef = db.collection("sign-docs").doc();
-        docRef.set({
+
+        const uids = users.map(u => ({uid: u.uid}))
+        const body = {
             multilateralId: document.multilateralId,
             fileName: document.fileName,
             firmados: [],
             numeroFirmas: users.length,
             docType: document.docType,
-            usuarios: users
-        }).then(async () => {
-            console.log("Document successfully updated!");
-            await this.addNewDocAlert(users, document.multilateralId);
-        })
+            usuarios: users,
+            uids,
+        }
+        console.log(body)
+        docRef.set(body)
+            .then(docRef => console.log(docRef))
             .catch((error) => {
                 console.error("Error updating document: ", error);
             });
@@ -34,7 +39,7 @@ class UserController {
     async getUIDsFromEmails(emailList) {
         const users = []
         for (const email of emailList) {
-            this.userCollection.where('email', '==', email)
+            await this.userCollection.where('email', '==', email)
                 .get()
                 .then(snapshot => {
                     snapshot.forEach(doc => {
@@ -66,15 +71,12 @@ class UserController {
     }
 
     getUserDocs(uid) {
-        console.log('ptm')
         const docs = []
         db.collection("sign-docs").where('uids', 'array-contains', {uid: uid})
             .get()
             .then(snapshot => {
-                console.log(snapshot, 'snap')
                 snapshot.forEach(doc => {
                     const docData = doc.data()
-                    console.log(docData, 'doctada')
                     docs.push(docData)
                 });
             })
