@@ -1,14 +1,16 @@
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import Popup from "reactjs-popup";
 import Card from "react-bootstrap/Card";
 import {Col} from "react-bootstrap";
 import SignatureCanvas from "react-signature-canvas";
 import Button from "react-bootstrap/Button";
+import UserController from "../../../controller/user_controller";
 
 const SignPopUP = (props) => {
     const sigCanvas = useRef({});
     const clear = () => sigCanvas.current.clear();
-
+    const userController = new UserController();
+    const [loading, setLoading] = useState(false)
     const sign = async () => {
         const signedSuccessfully = await props.seguriSignController.biometricSignature(sigCanvas.current, props.multilateralId, props.lat, props.long);
         if (signedSuccessfully) {
@@ -20,7 +22,7 @@ const SignPopUP = (props) => {
     }
     return (
         <div>
-            <Popup modal trigger={<button style={{'width':'100%'}} className='btn-seguridata-lg'>Firmar</button>}>
+            <Popup modal trigger={<button style={{'width': '100%'}} className='btn-seguridata-lg'>Firmar</button>}>
                 {close => (
                     <div align='center'>
                         <Card style={{}}>
@@ -43,8 +45,16 @@ const SignPopUP = (props) => {
                                         'height': '3rem',
                                         'width': '9rem',
                                         'margin-left': '3rem',
-                                    }} onClick={() => {
-                                        sign().then(_ => close)
+                                    }} onClick={async () => {
+                                       setLoading(true)
+                                        const status = await sign();
+                                        if (status) {
+                                            await userController.updateDocSigned(props.multilateralId);
+                                            props.toaster.successToast('Documento firmado con éxito');
+                                        } else
+                                            props.toaster.errorToast('Error al firmar documento');
+                                        setLoading(false)
+                                        close();
                                     }}>Firmar
                                     </button>
 

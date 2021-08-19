@@ -1,5 +1,4 @@
-import {db} from "./firebase_controller";
-import {logDOM} from "@testing-library/react";
+import {auth, db} from "./firebase_controller";
 
 class UserController {
     userCollection = db.collection('users');
@@ -44,7 +43,7 @@ class UserController {
                 .then(snapshot => {
                     snapshot.forEach(doc => {
                         const docData = doc.data()
-                        users.push({uid: docData.uid, email: docData.email, name: docData.fullname})
+                        users.push({uid: docData.uid, email: docData.email, name: docData.fullname, firmo: false})
                     });
                 })
                 .catch(err => {
@@ -84,6 +83,20 @@ class UserController {
                 console.log('Error getting documents', err);
             });
         return docs;
+    }
+
+    async updateDocSigned(multilateralId) {
+        const snapshot = await this.signDocCollection.where('multilateralId', '==', multilateralId).get();
+        if (snapshot.size > 0) {
+            const uid = auth.currentUser.uid
+            const doc = snapshot.docs[0];
+            const docData = doc.data();
+            docData.firmados.push(uid)
+            docData.usuarios.forEach(u => {
+                u.firmo = u.uid === uid
+            })
+            await doc.ref.update(docData)
+        }
     }
 }
 

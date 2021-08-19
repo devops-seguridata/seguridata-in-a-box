@@ -10,7 +10,6 @@ const UnsignedDocuments = (props) => {
     const [loading, setLoading] = useState(false)
     const userController = new UserController()
 
-
     const renderTableCell = (user, index) => {
         return (
             <tr key={index}>
@@ -25,6 +24,8 @@ const UnsignedDocuments = (props) => {
         )
     }
 
+    const getPercentage = item => Math.floor((item.firmados.length / item.numeroFirmas) * 100) ;
+
     return (
         <Accordion bsPrefix='seguridata' flush style={{'position': 'inherit'}}>
             <Accordion.Header>Por Firmar<Badge style={{'marginLeft': '3rem'}} pill
@@ -32,8 +33,7 @@ const UnsignedDocuments = (props) => {
             <Accordion.Body>
                 <Accordion flush>
                     {props.unsignedDocuments.map(function (item, index) {
-                        const now = item.firmados.length / item.numeroFirmas;
-                        console.log(item)
+                        const now = getPercentage(item);
                         return <Accordion.Item eventKey={index + 1}>
                             <Accordion.Header>{item.fileName}<ProgressBar bsPrefix='progress-bar' striped variant="info"
                                                                           now={now}
@@ -52,22 +52,22 @@ const UnsignedDocuments = (props) => {
                                         <li>
                                             Firmados: {item.firmados.length}
                                         </li>
-                                        <div>
-                                            <Table striped bordered hover>
-                                                <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Nombre</th>
-                                                    <th>Correo</th>
-                                                    <th>Status</th>
-                                                    <th>Recordar</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {item.usuarios.map(renderTableCell)}
-                                                </tbody>
-                                            </Table>
-                                        </div>
+                                    </div>
+                                    <div>
+                                        <Table striped bordered hover>
+                                            <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Nombre</th>
+                                                <th>Correo</th>
+                                                <th>Status</th>
+                                                <th>Recordar</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {item.usuarios.map(renderTableCell)}
+                                            </tbody>
+                                        </Table>
                                     </div>
                                     <br/>
                                     <Row>
@@ -100,6 +100,7 @@ const UnsignedDocuments = (props) => {
                                         </Col>
                                         <Col>
                                             <SignPopUP
+                                                toaster={props.toaster}
                                                 seguriSignController={props.seguriSignController}
                                                 long={props.long} lat={props.lat}
                                                 key={item.multilateralId}

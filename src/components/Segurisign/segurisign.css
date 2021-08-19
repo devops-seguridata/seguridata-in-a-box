@@ -123,6 +123,8 @@ newDocContent {
 
 .progress-bar {
     margin-left: 2rem;
-    background-color: #6b6b6b;
     margin-right: 2rem;
+    width: 100%;
+    background-color: #80808047 !important;
+
 }
